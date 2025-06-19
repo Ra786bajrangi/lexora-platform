@@ -29,7 +29,7 @@ const UserManagement = () => {
 
   const toggleUserStatus = async (id) => {
     try {
-      await axios.put(`/api/admin/users/${id}/toggle`, {}, {
+      await axios.put(`http://localhost:5000/api/admin/users/${id}/toggle`, {}, {
         headers: { Authorization: `Bearer ${token}` },
       });
       fetchUsers();
