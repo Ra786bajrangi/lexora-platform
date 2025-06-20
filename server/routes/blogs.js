@@ -3,6 +3,7 @@ const router = express.Router();
 const auth = require('../middleware/auth');
 const Blog = require('../models/Blog');
 const Activity = require('../models/Activity'); 
+const User = require('../models/User'); 
 
 const upload = require('../middleware/upload');
 const { check, validationResult } = require('express-validator');
@@ -93,6 +94,74 @@ router.get('/my-blogs', auth, async (req, res) => {
     });
   }
 });
+// @route   GET /api/blogs/trending
+// @desc    Get top 6 trending blog posts based on number of likes
+// @access  Public
+router.get('/trending', async (req, res) => {
+  try {
+    const allBlogs = await Blog.find().populate('author', 'username avatar');
+
+    // Sort by number of likes manually
+    const trendingBlogs = allBlogs
+      .sort((a, b) => b.likes.length - a.likes.length)
+      .slice(0, 3); // top 3
+
+    res.json(trendingBlogs);
+  } catch (err) {
+    console.error('Error fetching trending blogs:', err.message);
+    res.status(500).send('Server Error');
+  }
+});
+// @route   GET /api/blogs/authors
+// @desc    Get unique authors who have written blogs
+// @access  Public
+router.get('/authors', async (req, res) => {
+  try {
+    const blogs = await Blog.find().populate('author', 'username avatar bio name');
+    const authorMap = new Map();
+
+    blogs.forEach(blog => {
+      const a = blog.author;
+      if (a && !authorMap.has(a._id.toString())) {
+        authorMap.set(a._id.toString(), {
+          id: a._id,
+          username: a.username,
+          name: a.name || a.username,
+          avatar: a.avatar || '/default-avatar.png',
+          bio: a.bio || 'Passionate writer',
+        });
+      }
+    });
+
+    res.json([...authorMap.values()].slice(0, 8));
+  } catch (err) {
+    console.error('Error fetching authors:', err.message);
+    res.status(500).json({ message: 'Server Error' });
+  }
+});
+router.get('/author/:username', async (req, res) => {
+  try {
+    const user = await User.findOne({ username: req.params.username }).select('-password');
+    if (!user) return res.status(404).json({ message: 'Author not found' });
+
+    const blogs = await Blog.find({ author: user._id }).sort({ createdAt: -1 });
+
+    res.json({
+      author: {
+        id: user._id,
+        name: user.name || user.username,
+        username: user.username,
+        avatar: user.avatar || '/default-avatar.png',
+        bio: user.bio || 'This user has not written a bio yet.',
+      },
+      blogs,
+    });
+  } catch (err) {
+    console.error('Author route error:', err.message);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 
 // @route   GET api/blogs/:id
 // @desc    Get blog post by ID
