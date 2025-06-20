@@ -11,7 +11,7 @@ import BlogListPage from './pages/BlogListPage';
 import PrivateRoute from './components/PrivateRoute';
 import BlogEditor from'./components/blogs/BlogEditor';
 import UserDashboardPage from './pages/UserDashboardPage';
-
+import AuthorProfile from './pages/AuthorProfile';
 function App() {
   return (
     <Provider store={store}>
@@ -22,6 +22,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/blogs" element={<BlogListPage />} />
           <Route path="/blogs/:id" element={<BlogDetailPage />} />
+           <Route path="/author/:username" element={<AuthorProfile />} />
 
           <Route path="/dashboard" element={<PrivateRoute />} />
 <Route path="/user-dashboard" element={<UserDashboardPage />} />
