@@ -10,6 +10,11 @@ const UserSchema = new mongoose.Schema({
     minlength: 3,
     maxlength: 30
   },
+  name: {
+    type: String,
+    trim: true,
+    default: ''
+  },
   email: {
     type: String,
     required: true,
@@ -22,6 +27,15 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
     minlength: 6
+  },
+   avatar: {
+    type: String,
+    default: '/default-avatar.png' // fallback avatar
+  },
+  bio: {
+    type: String,
+    maxlength: 200,
+    default: 'Passionate writer.' // you can customize
   },
   role: {
     type: String,
