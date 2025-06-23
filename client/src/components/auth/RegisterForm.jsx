@@ -8,98 +8,74 @@ const RegisterForm = () => {
     username: '',
     email: '',
     password: '',
-    role: 'user', // default role
+    role: 'user',
   });
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form Data Submitted:", formData); // ✅ check role is there
-
     dispatch(registerUser(formData))
       .unwrap()
-      .then(() => navigate('/dashboard'))
-      .catch((err) => console.error(err));
+      .then(() => {
+        const user = JSON.parse(localStorage.getItem('user'));
+        navigate(`/author/${user.username}`);
+      })
+      .catch((err) => console.error('Registration failed:', err));
   };
 
   return (
-    <div className="bg-white/20 backdrop-blur-md border border-white/30 shadow-lg rounded-2xl px-8 py-10 w-full max-w-md animate-fade-in text-white">
-      <h2 className="text-3xl font-bold text-center mb-6 drop-shadow-md">Create Account</h2>
+    <div className="bg-white/20 backdrop-blur-md border border-white/30 shadow-lg rounded-2xl px-8 py-10 w-full animate-fade-in">
+      <h2 className="text-3xl font-bold text-white text-center mb-6 drop-shadow-md">Create Account</h2>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div>
-          <label htmlFor="username" className="block mb-2 font-semibold">
-            Username
-          </label>
-          <input
-            type="text"
-            id="username"
-            name="username"
-            value={formData.username}
-            onChange={handleChange}
-            className="w-full px-4 py-2 rounded-lg bg-white/30 text-white placeholder-white/70 focus:ring-2 focus:ring-cyan-400 focus:outline-none transition duration-200"
-            placeholder="Your username"
-            required
-          />
-        </div>
-
-        <div>
-          <label htmlFor="email" className="block mb-2 font-semibold">
-            Email
-          </label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            className="w-full px-4 py-2 rounded-lg bg-white/30 text-white placeholder-white/70 focus:ring-2 focus:ring-purple-400 focus:outline-none transition duration-200"
-            placeholder="you@example.com"
-            required
-          />
-        </div>
-
-        <div>
-          <label htmlFor="password" className="block mb-2 font-semibold">
-            Password
-          </label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            className="w-full px-4 py-2 rounded-lg bg-white/30 text-white placeholder-white/70 focus:ring-2 focus:ring-pink-400 focus:outline-none transition duration-200"
-            placeholder="••••••••"
-            required
-          />
-        </div>
-        <div>
-  <label htmlFor="role" className="block mb-2 font-semibold">
-    Role
-  </label>
-  <select
-    id="role"
-    name="role"
-    value={formData.role}
-    onChange={handleChange}
-    className="w-full px-4 py-2 rounded-lg bg-white/30 text-white placeholder-white/70 focus:ring-2 focus:ring-green-400 focus:outline-none transition duration-200"
-  >
-    <option value="user">User</option>
-    <option value="admin">Admin</option>
-  </select>
-</div>
-
+        <input
+          type="text"
+          name="username"
+          placeholder="Username"
+          className="w-full px-4 py-2 rounded-lg bg-white/30 text-white placeholder-white/70"
+          value={formData.username}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          className="w-full px-4 py-2 rounded-lg bg-white/30 text-white placeholder-white/70"
+          value={formData.email}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          className="w-full px-4 py-2 rounded-lg bg-white/30 text-white placeholder-white/70"
+          value={formData.password}
+          onChange={handleChange}
+          required
+        />
+        <select
+          name="role"
+          value={formData.role}
+          onChange={handleChange}
+          className="w-full px-4 py-2 rounded-lg bg-white/30 text-white"
+        >
+          <option value="user">User</option>
+          <option value="admin">Admin</option>
+        </select>
 
         <button
           type="submit"
-          className="w-full py-2 px-4 bg-gradient-to-r from-pink-500 to-purple-500 text-white font-semibold rounded-lg hover:from-purple-500 hover:to-pink-500 transition duration-300 shadow-md"
+          className="w-full py-2 px-4 bg-gradient-to-r from-green-500 to-blue-500 text-white font-semibold rounded-lg hover:from-blue-500 hover:to-green-500 transition duration-300 shadow-md"
         >
           Register
         </button>

@@ -16,13 +16,20 @@ const LoginForm = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    dispatch(loginUser(formData))
-      .unwrap()
-      .then(() => navigate('/dashboard'))
-      .catch((err) => console.error(err));
-  };
+ const handleSubmit = (e) => {
+  e.preventDefault();
+  dispatch(loginUser(formData))
+    .unwrap()
+    .then((res) => {
+      localStorage.setItem('token', res.token);
+  localStorage.setItem('user', JSON.stringify(res.user));
+
+      // Go to dashboard after login, no condition
+      navigate('/user-dashboard');
+    })
+    .catch((err) => console.error(err));
+};
+
 
   return (
     <div className="bg-white/20 backdrop-blur-md border border-white/30 shadow-lg rounded-2xl px-8 py-10 w-full animate-fade-in">

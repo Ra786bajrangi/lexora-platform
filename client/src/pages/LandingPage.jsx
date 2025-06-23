@@ -4,7 +4,7 @@ import { FaFacebookF, FaInstagram, FaTwitter, FaSearch } from 'react-icons/fa';
 import { useState, useEffect } from 'react';
 import TrendingSection from "../components/TrendingSection";
 import FeaturedWriter from '../components/FeaturedWriter';
-// Sample data - replace with your actual data from API
+
 const features = [
   {
     title: 'Write Freely',
@@ -27,62 +27,33 @@ const testimonials = [
   {
     name: 'Aarav Sharma',
     quote: 'Lexora made publishing my ideas a breeze. It\'s beautiful and simple!',
-    image: '/images/user1.jpg',
+    image: '/images/user1.webp',
   },
   {
     name: 'Meera Kapoor',
     quote: 'As a reader, I enjoy discovering quality blogs every day.',
-    image: '/images/user2.jpg',
+    image: '/images/user2.webp',
   },
 ];
 
 
 
-const featuredAuthors = [
-  {
-    id: 1,
-    name: 'Priya Patel',
-    bio: 'Tech Writer',
-    avatar: '/images/author1.jpg',
-    username: 'priyapatel'
-  },
-  {
-    id: 2,
-    name: 'Rahul Verma',
-    bio: 'Travel Blogger',
-    avatar: '/images/author2.jpg',
-    username: 'rahulverma'
-  },
-  {
-    id: 3,
-    name: 'Neha Gupta',
-    bio: 'Food Critic',
-    avatar: '/images/author3.jpg',
-    username: 'nehagupta'
-  },
-  {
-    id: 4,
-    name: 'Arjun Singh',
-    bio: 'Finance Expert',
-    avatar: '/images/author4.jpg',
-    username: 'arjunsingh'
-  }
-];
+
 
 const recentComments = [
   {
     id: 1,
     user: 'Sanjay Kumar',
     avatar: '/images/user3.jpg',
-    postTitle: 'React Hooks Guide',
-    text: 'This tutorial helped me understand useEffect perfectly!'
+    postTitle: 'Apple intelligence',
+    text: 'it is very worthreading'
   },
   {
     id: 2,
     user: 'Ananya Joshi',
-    avatar: '/images/user4.jpg',
-    postTitle: 'Healthy Breakfast Ideas',
-    text: 'Tried the smoothie recipe and loved it!'
+    avatar: '/images/user4.jpeg',
+    postTitle: 'wellness Blog',
+    text: 'Doing yoga according to this blog and stay healthy'
   }
 ];
 
@@ -313,11 +284,11 @@ const LandingPage = () => {
             <p className="text-gray-300 mb-6">Read and write on the go with our mobile application.</p>
             <div className="flex gap-4">
               <button className="flex items-center gap-2 bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded">
-                <img src="/images/app-store.svg" className="h-6" alt="App Store" />
+                <img src="/images/App-Store.png" className="h-6" alt="App Store" />
                 <span>App Store</span>
               </button>
               <button className="flex items-center gap-2 bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded">
-                <img src="/images/play-store.svg" className="h-6" alt="Play Store" />
+                <img src="/images/app-store.webp" className="h-6" alt="Play Store" />
                 <span>Google Play</span>
               </button>
             </div>

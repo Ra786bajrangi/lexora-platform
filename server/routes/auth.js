@@ -36,7 +36,16 @@ router.post('/register', async (req, res) => {
 
     jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '5d' }, (err, token) => {
       if (err) return res.status(500).json({ msg: 'Token generation failed' });
-      res.json({ token });
+      res.json({
+  token,
+  user: {
+    id: newUser.id,
+    username: newUser.username,
+    email: newUser.email,
+    role: newUser.role
+  }
+});
+
     });
   } catch (err) {
     console.error("Register Error:", err.message);
@@ -79,7 +88,16 @@ router.post('/login', [
 
     jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '5d' }, (err, token) => {
       if (err) throw err;
-      res.json({ token });
+      res.json({
+  token,
+  user: {
+    id: user.id,
+    username: user.username,
+    email: user.email,
+    role: user.role
+  }
+});
+
     });
   } catch (err) {
     console.error(err.message);

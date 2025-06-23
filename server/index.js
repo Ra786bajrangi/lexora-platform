@@ -9,6 +9,7 @@ const authRoutes = require('./routes/auth');
 const blogRoutes = require('./routes/blogs');
 const path = require('path');
 const adminRoutes = require('./routes/admin'); 
+const userRoutes = require('./routes/Users')
 
 
 
@@ -31,6 +32,8 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads'), {
     res.set('Access-Control-Allow-Origin', '*');
   }
 }));
+//user routes
+app.use('/api/users', userRoutes);
 
 
 // ✅ Add this line for admin routes
