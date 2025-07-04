@@ -21,54 +21,106 @@ const AuthorProfile = () => {
     };
 
     fetchAuthor();
-    const user = JSON.parse(localStorage.getItem("user")); // { token, id, username }
+    const user = JSON.parse(localStorage.getItem("user"));
     setCurrentUser(user);
   }, [username]);
+const handleImageChange = (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    setSelectedImage(file);
-    setPreview(URL.createObjectURL(file));
-  };
+  // Validate file type
+  const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
+  if (!validTypes.includes(file.type)) {
+    alert('Please upload a JPEG, PNG, or WebP image');
+    return;
+  }
 
-  const handleUpload = async () => {
-    if (!selectedImage || !currentUser?.token) return;
+  // Validate file size (2MB max)
+  if (file.size > 2 * 1024 * 1024) {
+    alert('Image must be smaller than 2MB');
+    return;
+  }
 
-    const formData = new FormData();
-    formData.append("avatar", selectedImage);
-    setUploading(true);
+  setSelectedImage(file);
+  setPreview(URL.createObjectURL(file));
+};
 
-    try {
-      const res = await axios.patch(
-        `http://localhost:5000/api/users/avatar/${currentUser.id}`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${currentUser.token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+ const handleUpload = async () => {
+  // Get fresh authentication data
+  const authToken = localStorage.getItem('token');
+  const freshUser = JSON.parse(localStorage.getItem('user'));
 
-      // Update UI
-      setData((prev) => ({
-        ...prev,
-        author: { ...prev.author, avatar: res.data.avatar },
-      }));
-      setSelectedImage(null);
-      setPreview(null);
-    } catch (err) {
-      console.error("Upload failed:", err);
-    } finally {
-      setUploading(false);
+  if (!selectedImage) {
+    alert('Please select an image first');
+    return;
+  }
+
+  if (!authToken || !freshUser?.id) {
+    alert('Please login to update your avatar');
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append('avatar', selectedImage);
+  setUploading(true);
+
+  try {
+    const res = await axios.patch(
+      `http://localhost:5000/api/users/avatar/${freshUser.id}`,
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+    );
+
+    // Update all states
+    setData(prev => ({
+      ...prev,
+      author: { ...prev.author, avatar: res.data.avatar }
+    }));
+
+    // Update local storage and state
+    const updatedUser = { 
+      ...freshUser, 
+      avatar: res.data.avatar 
+    };
+    localStorage.setItem('user', JSON.stringify(updatedUser));
+    setCurrentUser(updatedUser);
+
+    // Reset selection
+    setSelectedImage(null);
+    setPreview(null);
+
+    alert('Avatar updated successfully!');
+
+  } catch (err) {
+    console.error('Upload error:', {
+      status: err.response?.status,
+      data: err.response?.data,
+      message: err.message
+    });
+
+    let errorMessage = 'Failed to update avatar';
+    if (err.response) {
+      if (err.response.status === 403) {
+        errorMessage = 'You are not authorized to update this profile';
+      } else if (err.response.status === 400) {
+        errorMessage = err.response.data.message || 'Invalid file format';
+      }
     }
-  };
+    alert(errorMessage);
 
+  } finally {
+    setUploading(false);
+  }
+};
   if (!data) return <div className="text-center py-20">Loading...</div>;
+  
   const { author, blogs } = data;
-  console.log("currentUser:", currentUser);
-console.log("username from URL:", username);
-
+  
   return (
     <div className="max-w-5xl mx-auto px-6 py-16 bg-white dark:bg-gray-900">
       <div className="text-center mb-10">
@@ -80,7 +132,6 @@ console.log("username from URL:", username);
         <h2 className="text-2xl font-bold dark:text-white">{author.name}</h2>
         <p className="text-gray-600 dark:text-gray-300">{author.bio}</p>
 
-        {/* Show upload section only if user is owner */}
         {currentUser?.username === username && (
           <div className="mt-4 flex flex-col items-center gap-3">
             <input

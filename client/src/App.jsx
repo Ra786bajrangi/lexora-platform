@@ -26,12 +26,7 @@ function App() {
 
           <Route path="/dashboard" element={<PrivateRoute />} />
 <Route path="/user-dashboard" element={<UserDashboardPage />} />
-<Route path="/admin-dashboard" element={<PrivateRoute>
-      
-        <AdminDashboard />
-      
-    </PrivateRoute>
-  } />
+<Route path="/admin-dashboard" element={<AdminDashboard />} />
 
 
           {/* Create Blog Page */}

@@ -111,6 +111,16 @@ const UserDashboardPage = () => {
                 ✍️ Create Blog
               </Link>
             </li>
+            {user?.role === 'admin' && (
+    <li>
+      <Link
+        to="/admin-dashboard"
+        className="text-gray-700 hover:text-green-600 font-medium transition"
+      >
+        🛠️ Admin Panel
+      </Link>
+    </li>
+  )}
           </ul>
         </div>
         <button

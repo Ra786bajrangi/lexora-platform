@@ -1,24 +1,45 @@
+// controllers/userController.js
 const User = require('../models/User');
 
-exports.updateAvatar = async (req, res) => {
+const updateAvatar = async (req, res) => {
   try {
-    const userIdFromParams = req.params.id;
-    const userIdFromToken = req.user.id;
-
-    // Optional: allow only the same user to update their avatar
-    if (userIdFromParams !== userIdFromToken) {
-      return res.status(403).json({ msg: 'Unauthorized to update this profile' });
+    // Verify the user making the request owns the account
+    if (req.user.id !== req.params.id) {
+      return res.status(403).json({ message: 'Unauthorized to update this profile' });
     }
 
-    const user = await User.findById(userIdFromParams);
-    if (!user) return res.status(404).json({ msg: 'User not found' });
+    if (!req.file) {
+      return res.status(400).json({ message: 'No avatar file provided' });
+    }
 
-    user.avatar = req.file.path; // This is the Cloudinary URL
-    await user.save();
+    const avatarUrl = req.file.path;
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.id,
+      { avatar: avatarUrl },
+      { new: true, runValidators: true }
+    );
 
-    res.status(200).json({ msg: 'Avatar updated', avatar: user.avatar });
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.json({
+      message: 'Avatar updated successfully',
+      avatar: avatarUrl,
+      user: {
+        id: updatedUser._id,
+        username: updatedUser.username,
+        email: updatedUser.email
+      }
+    });
+
   } catch (error) {
-    console.error('Avatar update error:', error.message);
-    res.status(500).json({ msg: 'Server error', error: error.message });
+    console.error('Avatar update error:', error);
+    res.status(500).json({ 
+      message: 'Failed to update avatar',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
   }
 };
+
+module.exports = { updateAvatar };
