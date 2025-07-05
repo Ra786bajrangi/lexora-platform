@@ -1,7 +1,7 @@
 // src/components/AdminAnalytics.jsx
 import { useEffect, useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
-import axios from 'axios';
+import axios from '../utils/axiosConfig';
 
 const AdminAnalytics = () => {
   const [analyticsData, setAnalyticsData] = useState([]);
@@ -10,7 +10,7 @@ const AdminAnalytics = () => {
   useEffect(() => {
     const fetchAnalytics = async () => {
       try {
-        const blogsRes = await axios.get('http://localhost:5000/api/admin/blogs', {
+        const blogsRes = await axios.get('/admin/blogs', {
           headers: { Authorization: `Bearer ${token}` },
         });
 

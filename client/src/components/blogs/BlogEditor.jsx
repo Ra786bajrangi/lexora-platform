@@ -4,7 +4,7 @@ import 'react-quill/dist/quill.snow.css';
 import { useDispatch } from 'react-redux';
 import { createBlog, updateBlog } from '../../features/blogs/blogSlice';
 import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../../utils/axiosConfig';
 
 const BlogEditor = ({ mode = 'create' }) => {
   const [title, setTitle] = useState('');
@@ -21,7 +21,7 @@ const BlogEditor = ({ mode = 'create' }) => {
   useEffect(() => {
     if (mode === 'edit' && id) {
       axios
-        .get(`http://localhost:5000/api/blogs/${id}`, {
+        .get(`/blogs/${id}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`
           }

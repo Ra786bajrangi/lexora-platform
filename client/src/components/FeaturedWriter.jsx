@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import axios from '../utils/axiosConfig'; 
+
 
 const FeaturedWriter = () => {
   const [authors, setAuthors] = useState([]);
@@ -8,7 +9,7 @@ const FeaturedWriter = () => {
   useEffect(() => {
     const fetchAuthors = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/blogs/authors");
+        const res = await axios.get("/blogs/authors");
         setAuthors(res.data);
       } catch (err) {
         console.error("Failed to load authors:", err);

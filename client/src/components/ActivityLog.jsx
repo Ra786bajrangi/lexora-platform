@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios from '../utils/axiosConfig';
 import { FaSignInAlt, FaPenFancy } from 'react-icons/fa';
 
 const icons = {
@@ -14,7 +14,7 @@ const ActivityLog = () => {
   useEffect(() => {
     const fetchActivities = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/admin/activities', {
+        const res = await axios.get('/admin/activities', {
           headers: { Authorization: `Bearer ${token}` },
         });
         setActivities(res.data);

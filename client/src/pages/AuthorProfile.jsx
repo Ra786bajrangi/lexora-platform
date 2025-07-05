@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import axios from "axios";
+import axios from "../utils/axiosConfig";
 
 const AuthorProfile = () => {
   const { username } = useParams();
@@ -13,7 +13,7 @@ const AuthorProfile = () => {
   useEffect(() => {
     const fetchAuthor = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/blogs/author/${username}`);
+        const res = await axios.get(`/blogs/author/${username}`);
         setData(res.data);
       } catch (err) {
         console.error("Author fetch failed:", err);
@@ -66,7 +66,7 @@ const handleImageChange = (e) => {
 
   try {
     const res = await axios.patch(
-      `http://localhost:5000/api/users/avatar/${freshUser.id}`,
+      `/users/avatar/${freshUser.id}`,
       formData,
       {
         headers: {

@@ -1,10 +1,10 @@
 // features/auth/authSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import axios from "../../utils/axiosConfig";
 
 export const loginUser = createAsyncThunk('auth/loginUser', async (credentials, thunkAPI) => {
   try {
-    const res = await axios.post('http://localhost:5000/api/auth/login', credentials);
+    const res = await axios.post('/auth/login', credentials);
     const { token, user } = res.data;
 
     localStorage.setItem('user', JSON.stringify({ id: user.id, username: user.username, token }));
@@ -16,7 +16,7 @@ export const loginUser = createAsyncThunk('auth/loginUser', async (credentials, 
 
 export const registerUser = createAsyncThunk('auth/registerUser', async (formData, thunkAPI) => {
   try {
-    const res = await axios.post('http://localhost:5000/api/auth/register', formData);
+    const res = await axios.post('/auth/register', formData);
     const { token, user } = res.data;
 
     localStorage.setItem('user', JSON.stringify({ id: user.id, username: user.username, token }));

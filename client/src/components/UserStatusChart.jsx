@@ -1,6 +1,6 @@
 // src/components/UserStatusChart.jsx
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios from '../utils/axiosConfig';
 import {
   PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer
 } from 'recharts';
@@ -14,7 +14,7 @@ const UserStatusChart = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/admin/users', {
+        const res = await axios.get('/admin/users', {
           headers: { Authorization: `Bearer ${token}` },
         });
 

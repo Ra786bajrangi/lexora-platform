@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import axios from '../../utils/axiosConfig';
 
-const API_URL = 'http://localhost:5000/api/blogs';
+const API_URL = '/blogs';
 
 // Async thunk for fetching blogs
 export const fetchBlogs = createAsyncThunk(
@@ -25,7 +25,7 @@ export const createBlog = createAsyncThunk(
   async (formData, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        'http://localhost:5000/api/blogs',
+        '/blogs',
         formData,
         {
           headers: {
@@ -58,7 +58,7 @@ export const updateBlog = createAsyncThunk(
     };
 
     try {
-      const response = await axios.put(`http://localhost:5000/api/blogs/${id}`, blogData, config);
+      const response = await axios.put(`/blogs/${id}`, blogData, config);
       return response.data;
     } catch (err) {
       console.error('Update blog failed:', err.response?.data || err.message);
@@ -72,7 +72,7 @@ export const updateBlog = createAsyncThunk(
 export const deleteBlog = createAsyncThunk('blogs/deleteBlog', async (id, thunkAPI) => {
   try {
     const token = localStorage.getItem('token');
-    await axios.delete(`http://localhost:5000/api/blogs/${id}`, {
+    await axios.delete(`/blogs/${id}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
        

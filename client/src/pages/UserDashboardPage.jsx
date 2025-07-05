@@ -3,7 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { loadUser } from '../features/auth/authSlice';
 import { deleteBlog } from '../features/blogs/blogSlice';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../utils/axiosConfig'; 
+
 import { motion } from 'framer-motion';
 
 import Pagination from '../components/Pagination';
@@ -40,7 +41,7 @@ const UserDashboardPage = () => {
 
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/blogs/my-blogs?page=${pagination.currentPage}`,
+          `/blogs/my-blogs?page=${pagination.currentPage}`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('token')}`,

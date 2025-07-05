@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios from '../utils/axiosConfig';
 import { FaSort, FaSortDown, FaSortUp } from 'react-icons/fa';
 
 const USERS_PER_PAGE = 5;
@@ -16,7 +16,7 @@ const UserManagement = () => {
 
   const fetchUsers = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/admin/users', {
+      const res = await axios.get('/admin/users', {
         headers: { Authorization: `Bearer ${token}` },
       });
       setUsers(Array.isArray(res.data) ? res.data : []);
@@ -29,7 +29,7 @@ const UserManagement = () => {
 
   const toggleUserStatus = async (id) => {
     try {
-      await axios.put(`http://localhost:5000/api/admin/users/${id}/toggle`, {}, {
+      await axios.put(`/admin/users/${id}/toggle`, {}, {
         headers: { Authorization: `Bearer ${token}` },
       });
       fetchUsers();

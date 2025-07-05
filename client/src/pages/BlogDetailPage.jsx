@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../utils/axiosConfig';
 
 const BlogDetailPage = () => {
   const { id } = useParams();
@@ -17,7 +17,7 @@ const BlogDetailPage = () => {
   useEffect(() => {
     const fetchBlog = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/blogs/${id}`);
+        const res = await axios.get(`/blogs/${id}`);
         setBlog(res.data);
         setLikes(res.data.likes?.length || 0);
         setComments(res.data.comments || []);
@@ -38,7 +38,7 @@ const BlogDetailPage = () => {
     setIsLiking(true);
     try {
       const res = await axios.post(
-        `http://localhost:5000/api/blogs/${id}/like`,
+        `/blogs/${id}/like`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -62,7 +62,7 @@ const BlogDetailPage = () => {
     setIsCommenting(true);
     try {
       const res = await axios.post(
-        `http://localhost:5000/api/blogs/${id}/comments`,
+        `/blogs/${id}/comments`,
         { text: commentText },
         { headers: { Authorization: `Bearer ${token}` } }
       );

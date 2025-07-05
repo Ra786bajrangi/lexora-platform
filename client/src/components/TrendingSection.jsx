@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import axios from "../utils/axiosConfig"
 import DOMPurify from "dompurify";
 
 const TrendingSection = () => {
@@ -9,7 +9,7 @@ const TrendingSection = () => {
   useEffect(() => {
     const fetchTrending = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/blogs/trending");
+        const res = await axios.get("/blogs/trending");
         setTrendingPosts(res.data);
       } catch (err) {
         console.error("Error fetching trending posts:", err);
