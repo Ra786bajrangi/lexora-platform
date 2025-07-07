@@ -1,18 +1,24 @@
 import axios from 'axios';
 
+// Throw error if no API URL is set
+if (!import.meta.env.VITE_API_URL) {
+  throw new Error("VITE_API_URL is not defined");
+}
+
 const instance = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
+  baseURL: import.meta.env.VITE_API_URL, // No fallback to localhost here
 });
 
-// Add a request interceptor to include the token
-instance.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
-  if (token) {
-    config.headers['x-auth-token'] = token;
-  }
-  return config;
-}, (error) => {
-  return Promise.reject(error);
-});
+instance.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      // Use the header expected by your backend:
+      config.headers['Authorization'] = `Bearer ${token}`; // or use 'x-auth-token'
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
 export default instance;
