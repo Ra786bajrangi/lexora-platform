@@ -13,12 +13,12 @@ const { check, validationResult } = require('express-validator');
 router.post(
   '/',
   [
-    auth,upload.single('image'),
-    [
-      check('title', 'Title is required').not().isEmpty(),
-      check('content', 'Content is required').not().isEmpty()
-    ]
+    auth,
+    upload.single('image'),
+    check('title', 'Title is required').not().isEmpty(),
+    check('content', 'Content is required').not().isEmpty()
   ],
+  
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
