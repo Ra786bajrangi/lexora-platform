@@ -9,7 +9,7 @@ const authRoutes = require('./routes/auth');
 const blogRoutes = require('./routes/blogs');
 const path = require('path');
 const adminRoutes = require('./routes/admin'); 
-const userRoutes = require('./routes/Users')
+const userRoutes = require('./routes/users')
 
 
 
