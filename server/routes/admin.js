@@ -6,13 +6,13 @@ const User = require('../models/User');
 const Blog = require('../models/Blog');
 const Activity = require('../models/Activity'); 
 
-// Get all users
+
 router.get('/users', auth, checkAdmin, async (req, res) => {
   const users = await User.find().select('-password');
   res.json(users);
 });
 
-// Activate/deactivate user
+
 router.put('/users/:id/toggle', auth, checkAdmin, async (req, res) => {
   const user = await User.findById(req.params.id);
   user.isActive = !user.isActive;
@@ -20,12 +20,12 @@ router.put('/users/:id/toggle', auth, checkAdmin, async (req, res) => {
   res.json(user);
 });
 
-// Get all blogs
+
 router.get('/blogs', auth, checkAdmin, async (req, res) => {
   const blogs = await Blog.find().populate('author', 'username email');
   res.json(blogs);
 });
-// routes/admin.js
+
 router.get('/activities', async (req, res) => {
   try {
     const activities = await Activity.find()
@@ -40,7 +40,7 @@ router.get('/activities', async (req, res) => {
 });
 
 
-// Delete blog
+
 router.delete('/blogs/:id', auth, checkAdmin, async (req, res) => {
   await Blog.findByIdAndDelete(req.params.id);
   res.json({ msg: 'Blog deleted' });
