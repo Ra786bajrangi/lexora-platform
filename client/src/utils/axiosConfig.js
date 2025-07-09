@@ -6,15 +6,15 @@ if (!import.meta.env.VITE_API_URL) {
 }
 
 const instance = axios.create({
-  baseURL: import.meta.env.VITE_API_URL, // No fallback to localhost here
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
+  withCredentials: true, // ✅ This is required if your backend sets credentials: true
 });
 
 instance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
     if (token) {
-      // Use the header expected by your backend:
-      config.headers['Authorization'] = `Bearer ${token}`; // or use 'x-auth-token'
+      config.headers['Authorization'] = `Bearer ${token}`; // or 'x-auth-token' if you use that
     }
     return config;
   },
